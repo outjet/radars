@@ -3,135 +3,11 @@
 <head>
     <meta charset="utf-8">
     <title>Radars</title>
-    <style>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>    
+    <script src="scripts/updateTime.js"></script>
+    <script src="scripts/refreshCams.js"></script>
 
-        body{
-           font-family: 'Open Sans', sans-serif;
-           font-weight: 600;
-           font-size: 0.8em;
-        }
-
-        /* CSS styles for the images grid */
-         .radar-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: 1fr 1fr;
-            grid-gap: 10px;
-            max-height: 600px;
-            overflow: hidden;
-        }
-
-        .radar-grid img {
-            object-fit: cover;
-            max-width: 460px; /* sets a maximum width of 360px */
-            max-height: 460px; /* sets a maximum height of 360px */
-            object-fit: contain; /* preserves the aspect ratio of the image */
-        }
-        .image-grid {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .image-grid img {
-            max-width: 480px;
-            max-height: 480px;
-            object-fit: cover;
-            margin-right: 10px;
-        }
-
-
-        .image-grid div {
-            width: 480px;
-            height: 360px;
-            overflow: hidden;
-            margin: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            border: 1px solid #ccc;
-            }
-
-        .image-grid .caption {
-        padding: 0;
-        margin: 0;
-        font-size: 12px;
-        background-color: rgba(222, 222, 222, 0.8);
-        width: 100%;
-        }
-
-        /* CSS for the loading message */
-        .loading {
-            text-align: center;
-            font-size: 24px;
-            margin-top: 50px;
-        }
-        
-          .sensor-container {
-            display: flex; /* use flexbox layout */
-            width: 1020px;
-            justify-content: space-between; /* evenly space the elements horizontally */
-        }
-        
-        .sensor-box {
-            width: 17%;
-            margin-right: 2%;
-            padding: 10px;
-            box-sizing: border-box;
-            background-color: green;
-            color: white;
-        }
-
-        
-        .sensor-box.IceWatch {
-            background-color: red;
-            color: white;
-        }
-                
-        img.radars {
-            max-width: 480px; /* sets a maximum width of 360px */
-            max-height: 480px; /* sets a maximum height of 360px */
-            object-fit: contain; /* preserves the aspect ratio of the image */
-        }
-
-            .refresh-button {
-                background-color: #4CAF50; /* Green */
-                border: none;
-                color: white;
-                padding: 15px 32px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 16px;
-                margin: 4px 2px;
-                cursor: pointer;
-                border-radius: 10px;
-            }
-
-    </style>
-    
-    
-        <script>
-                function updateTime() {
-                    var localTime = new Date().toLocaleString("en-US", {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        hour12: true
-                    });
-                    var UTCtime = new Date(Date.now()).toLocaleString("en-US", {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        hour12: true,
-                        timeZone: 'UTC'
-                    });
-                    document.getElementById("local-time").innerHTML = localTime;
-                    document.getElementById("utc-time").innerHTML = UTCtime;
-                }
-                setInterval(updateTime, 1000);
-            </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body onload="updateTime()">
 <div class='sensor-container'>
@@ -181,29 +57,19 @@ foreach($data->results as $result) {
 <BR>
 <a href="https://icyroadsafety.com/lcr/" target="_blank">Icy Road Forecast</a>
     </div>
-    <div class='sensor-box' style='background-color:#DDD;color:#333;'>    
+    <div class='sensor-box' id='clocks' style='background-color:#DDD;color:#333;'>    
         <div><span id="local-time"></span> ET</div>
         <div><span id="utc-time"></span> UTC</div>
+        <DIV><span id="refresh-paused" style="display:none;">REFRESH PAUSED</span></DIV>
     </div>
 </div>
 
 
-<div style="clear: both;"></div> <BR>
-<button id="refreshBtn">Refresh Images</button>
 
-<script>
-  $(document).ready(function(){
-    $("#refreshBtn").click(function(){
-      $(".image-grid img").each(function(){
-        var currentSrc = $(this).attr("src");
-        $(this).attr("src", currentSrc + "?t=" + new Date().getTime());
-      });
-    });
-  });
-</script>
-   
+
 <div class="image-grid">
-    <?php
+
+   <?php
         $api_url = "https://publicapi.ohgo.com/api/v1/cameras?map-bounds-sw=41.46,-81.83&map-bounds-ne=41.49,-81.75";
         $headers = array(
             "Authorization: APIKEY 756bfc1c-746a-4a04-bc43-6c05521180e8",
