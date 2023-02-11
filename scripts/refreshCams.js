@@ -4,7 +4,7 @@ $(document).ready(function(){
       var currentSrc = $(this).attr("src");
       $(this).attr("src", currentSrc + "?t=" + new Date().getTime());
     });
-  }, 3000); // refresh every 3 seconds
+  }, 180000); // refresh every 3 seconds
 
   setTimeout(function(){
     clearInterval(refreshIntervalId);
@@ -22,6 +22,6 @@ $(document).ready(function(){
         var currentSrc = $(this).attr("src");
         $(this).attr("src", currentSrc + "?t=" + new Date().getTime());
       });
-    }, 3000);
+    }, 180000);
   });
 });
